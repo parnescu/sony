@@ -7,6 +7,7 @@ define([
 	return Backbone.View.extend({
 		template: _.template(template),
 		actionButton: null,
+		className: "page register",
 		events: {
 			"click .btn": "handleClick"
 		},
@@ -43,6 +44,7 @@ define([
 		},
 		handleClick: function(e){
 			e.preventDefault();
+			
 			if ($(e.target).hasClass('back')){
 				Backbone.trigger(_g.events.SIGNAL_GO_BACK, this);
 			}else{

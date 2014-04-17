@@ -5,7 +5,7 @@ define([
 ], function(B, _g, template){
 	return Backbone.View.extend({
 		template: _.template(template),
-		className: "page",
+		className: "page home",
 		subview: null,
 		playButton: null,
 		actionButton: null,
@@ -37,6 +37,11 @@ define([
 			this.actionButton.text("Profile");
 			trace('MAIN_SCREEN:: logged user is:')
 			trace(_g.user);
+		},
+		showNotLogged: function(){
+			this.actionButton.text("Login");
+			trace('MAIN_SCREEN:: user has logged out');
+
 		}
 	});
 });

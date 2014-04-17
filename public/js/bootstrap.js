@@ -10,7 +10,6 @@ require.config({
 		,"bootstrap": 		"/bootstrap/dist/js/bootstrap.min"
 		,"text": 			"/requirejs-text/text"
 	},
-
 	shim:{
 		backbone:{
 			deps: ['jquery','underscore','text'],
@@ -19,9 +18,4 @@ require.config({
 	}
 });
 
-require([
-	'js/app/main.js'
-], function(app){
-	app.init();
-
-});
+require(['js/app/main.js'], function(){ sonyTestApp.init();});

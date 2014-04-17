@@ -7,6 +7,7 @@ define([
 	return Backbone.View.extend({
 		template: _.template(template),
 		actionButton: null,
+		className: "page details",
 		events: {
 			"click .btn": "handleClick"
 		},
@@ -46,10 +47,14 @@ define([
 			e.preventDefault();
 			if ($(e.target).hasClass('back')){
 				Backbone.trigger(_g.events.SIGNAL_GO_BACK, this);
-			}else if (this.model.isValid()){
-				Backbone.trigger(_g.events.SEND_DETAILS_UPDATE, this.model);
-			}else{
-				Backbone.trigger(_g.events.SHOW_USER_WARNING, this.model);
+			}
+
+			if ($(e.target).hasClass('action')){
+				Backbone.trigger(this.model.isValid() ? _g.events.SEND_DETAILS_UPDATE : _g.events.SHOW_USER_WARNING, this.model);
+			}
+
+			if ($(e.target).hasClass('logout')){
+				Backbone.trigger(_g.events.SIGNAL_LOGOUT);
 			}
 		}
 	});

@@ -11,19 +11,16 @@ define([
 			,LINK_USER_DETAILS: "/profile/{userId}"
 			,LINK_USER_TITLES: "/profile/{userId}/titles/{titleId}"
 		}
-
 		
 		obj.pageStack = [];
 		obj.stage = null;			// global reference to where the app is located (default will be document.body)
 		obj.user = null;			// response from login
-
 
 		// screens
 		obj.main = null;
 		obj.login = null;
 		obj.register = null;
 		obj.details = null;
-
 
 		obj.events = {
 			BOOT_APP: "bootUpApp"
@@ -32,6 +29,7 @@ define([
 			,SIGNAL_NEW_GAME: "prepareGame"
 			,SIGNAL_DETAILS_PAGE: "detailsPage"
 			,SIGNAL_LOGIN_PAGE: "loginPage"
+			,SIGNAL_LOGOUT: "logoutPage"
 			,SIGNAL_REGISTER_PAGE: "registerPage"
 			,SIGNAL_GO_BACK: "goBack"
 			,SEND_LOGIN: "sendLoginData"

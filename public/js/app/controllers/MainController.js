@@ -118,11 +118,20 @@ define([
 				if (!_g.details){ _g.details = new DetailsScreen({ model: _g.user}).render();}
 				_render(_g.details);
 			},
+			handleLogout = function(){
+				trace("MAIN_CTRL:: ..logout");
+				_g.user = null;
+				_g.isLogged = false;
+
+				_g.main.showNotLogged();
+				_goBack(_g.details);
+			},
 		/* end - handlers for screens */
 
 			handle = function(){
 				trace('def handler')
 			},
+
 			_start = function(){
 				Backbone.on(_g.events.SHOW_USER_WARNING, handle);
 				Backbone.on(_g.events.SIGNAL_NEW_GAME, handle);
@@ -135,11 +144,13 @@ define([
 				Backbone.on(_g.events.SIGNAL_LOGIN_PAGE, handleLogin);
 				Backbone.on(_g.events.SIGNAL_REGISTER_PAGE, handleRegister);
 				Backbone.on(_g.events.SIGNAL_DETAILS_PAGE, handleDetails);
+				Backbone.on(_g.events.SIGNAL_LOGOUT, handleLogout);
 				Backbone.on(_g.events.BOOT_APP, handleInitStep);
 				Backbone.on(_g.events.SEND_LOGIN, handleLoginData);
 				Backbone.on(_g.events.SEND_REGISTER, handleRegisterData);
 				Backbone.on(_g.events.SEND_DETAILS_UPDATE, handleDetailsData);
-			}, _end = function(){
+			},
+			_end = function(){
 				Backbone.off(_g.events.LOADING_SUCCESS);
 				Backbone.off(_g.events.SHOW_USER_WARNING);
 				Backbone.off(_g.events.SIGNAL_NEW_GAME);
@@ -150,6 +161,7 @@ define([
 				Backbone.off(_g.events.SIGNAL_LOGIN_PAGE);
 				Backbone.off(_g.events.SIGNAL_REGISTER_PAGE);
 				Backbone.off(_g.events.SIGNAL_DETAILS_PAGE);
+				Backbone.off(_g.events.SIGNAL_LOGOUT);
 
 				Backbone.off(_g.events.SEND_LOGIN);
 				Backbone.off(_g.events.SEND_REGISTER);
