@@ -1,0 +1,48 @@
+<h2>Profile <%= fullname() %></h2>
+<button class="btn back">close</button>
+<form action="#submitNewUserData" method="post" id="registerForm">
+	<fieldset>
+		<div class="element">
+			<label for="username">User name:</label>
+			<input required type="text" name="username" id="username" placeholder="User name" required value="<%= get('username') %>" disabled/>
+		</div>
+		<div class="element">
+			<label for="password">Password:</label>
+			<input required type="password" name="password" id="password" placeholder="Password" required value="<%= get('password') %>"/>
+		</div>
+		<hr>
+		<div class="element">
+			<label for="firstName">First name:</label>
+			<input required type="text" name="firstName" id="firstName" placeholder="First name" required value="<%= get('firstName') %>"/>
+		</div>
+		<div class="element">
+			<label for="lastName">Last name:</label>
+			<input required type="text" name="lastName" id="lastName" placeholder="Last name" required value="<%= get('lastName') %>"/>
+		</div>
+		<div class="element">
+			<label>Sex:</label>
+			<div class="wrap">
+				<p>				
+					<input type="radio" name="genderIsFemale" id="male" value="false" <% if (!Boolean(get('genderIsFemale'))) { %> checked="checked" <% }%> >
+					<label for="male">male</label>
+				</p>
+				<p>
+					<input type="radio" name="genderIsFemale" id="female" value="true" <% if (Boolean(get('genderIsFemale'))) { %> checked="checked" <% }%> >
+					<label for="female">female</label>
+				</p>
+			</div>
+		</div>
+		<div class="element">
+			<label for="age">Age:</label>
+			<input type="number" name="age" id="age" required value="<%= get('age') %>"/>
+		</div>
+		<div class="element">
+			<label for="phoneNumber">Phone number:</label>
+			<input name="phoneNumber" id="phoneNumber" required value="<%= get('phoneNumber') %>"/>
+		</div>
+		<hr>
+		<div class="actions">
+			<button class="btn action" disabled>Submit</button>
+		</div>
+	</fieldset>
+</form>
