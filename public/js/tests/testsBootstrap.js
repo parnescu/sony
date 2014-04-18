@@ -41,6 +41,7 @@ var specs = ['/js/tests/tests.js'],
 		,'/js/app/views/LoginScreen.js'
 		,'/js/app/views/RegisterScreen.js'
 		,'/js/app/views/DetailsScreen.js'
+		,'/js/app/views/List.js'
 		,'/js/app/controllers/MainController.js'
 	];
 
@@ -52,6 +53,7 @@ requirejs(['boot'].concat(dependencies), function(boot
 		,LoginScreen
 		,RegisterScreen
 		,DetailsScreen
+		,List
 		,MainController
 	){
 	// models
@@ -63,6 +65,7 @@ requirejs(['boot'].concat(dependencies), function(boot
 	window.LoginScreen = LoginScreen;
 	window.RegisterScreen = RegisterScreen;
 	window.DetailsScreen = DetailsScreen;
+	window.List = List;
 
 	// other
 	window._g = _g;

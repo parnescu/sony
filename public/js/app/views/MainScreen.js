@@ -19,29 +19,40 @@ define([
 			if (!this.playButton){
 				this.playButton = this.$el.find('button.action');
 				this.actionButton = this.$el.find('button.logger');
+				this.addItems = this.$el.find('button.titles');
 			}
 			return this;
 		},
 		handleClick: function(e){
 			e.preventDefault();
-
-			if($(e.target).hasClass('action')){
+			var btn = $(e.target)
+			if(btn.hasClass('action')){
 				Backbone.trigger(_g.events.SIGNAL_NEW_GAME)
-			}else{
-				// if is logged in ...show details page
-				// else show login page
+			}
+			if(btn.hasClass('logger')){
 				Backbone.trigger(_g.isLogged ? _g.events.SIGNAL_DETAILS_PAGE : _g.events.SIGNAL_LOGIN_PAGE)
 			}
+
+			if(btn.hasClass('titles')){
+				Backbone.trigger(_g.events.SIGNAL_CHOOSE_TITLES);
+			}
+			btn = null;
 		},
 		showLogged: function(){
 			this.actionButton.text("Profile");
+			this.addItems.removeAttr('disabled');
 			trace('MAIN_SCREEN:: logged user is:')
-			trace(_g.user);
+			trace(_g.user.toJSON());
 		},
 		showNotLogged: function(){
 			this.actionButton.text("Login");
-			trace('MAIN_SCREEN:: user has logged out');
+			this.addItems.attr('disabled','disabled');
 
+			trace('MAIN_SCREEN:: user has logged out');
+			if (this.subview){
+				this.subview.remove();
+				this.subview = null;
+			}
 		}
 	});
 });

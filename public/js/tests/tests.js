@@ -10,9 +10,15 @@ describe("Jasmine TDD test suite", function(){
 			age: 18,
 			phoneNumber: "0258951",
 			notes: "ba dum tiss"
-		}
+		},
+		bogusTitles = [
+			{ id:0, name:"item 1", description:"a"}
+			,{ id:1, name:"item 2", description:"b"}
+			,{ id:2, name:"item 3", description:"c"}
+		]
 
 	describe("Views", function(){
+		var collection
 		describe("Main screen", function(){
 			it("should have a header, subview and two buttons (one for login, the other for play-game)", function(){
 				view = new MainScreen().render();
@@ -157,6 +163,68 @@ describe("Jasmine TDD test suite", function(){
 				value = null;
 				Backbone.off(_g.events.SEND_DETAILS_UPDATE);
 			});
+		});
+
+		describe("Game titles list", function(){
+			var i;
+			beforeEach(function(){
+				var _c = Backbone.Collection.extend({ model: GameTitle});
+				collection = new _c();
+				
+				view = new List({collection: collection}).render();
+				stage.append(view.el);
+				_c = null;
+			});
+
+			it("list with collection of elements, if no elements, show 'message'", function(){
+				expect(view.el.tagName).toBe("UL");
+				expect(collection.length).toEqual(0);
+				
+				i = view.$el.find('li');
+				expect(i.length).toBe(1);
+				expect(i.text()).toBe('There are no titles added');
+				expect(i.hasClass('noItems')).toBeTruthy();
+			});
+
+			it("adding titles removes 'message' and populates list", function(){
+				collection.add(bogusTitles);
+				expect(view.$el.find('.noItems').length).toEqual(0);
+
+				i = view.$el.find('li');
+				expect(i.length).toBe(bogusTitles.length);
+				expect($(i[1]).find('a.action').text()).toBe(bogusTitles[1].name);
+				
+			});
+
+			it("clicking an item signals controller, deleting an item removes it from collection and view", function(){
+				Backbone.on(_g.events.CLICK_LIST_ITEM, function(){ i = Infinity;});
+				Backbone.on(_g.events.REMOVE_LIST_ITEM, function(model){ 
+					i = -1;
+					view.collection.remove(model);
+				});
+				i = i || null;
+
+				expect(i).toBeNull();
+				collection.add(bogusTitles);
+				var p = view.$el.find('li:eq(1)');
+
+				$(p).find('a.action').click();
+				expect(i).toEqual(Infinity);
+
+				$(p).find('a.delete').click();
+				expect(i).toEqual(-1);
+				expect(collection.length).toBe(2);
+
+				p = null;
+			})
+
+			afterEach(function(){
+				i = null;
+				collection.reset();
+				view.remove();
+				view = null;
+				collection = null;
+			})
 		});
 
 	});

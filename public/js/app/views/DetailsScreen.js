@@ -36,8 +36,19 @@ define([
 			this.$el.find('h2').text("Profile "+a.fullname())
 		},
 		handleInputChange: function(e){
-			this.actionButton.removeAttr('disabled');
+			trace("DETAILS:: input changed");
+
+			if (e.target.type === "number"){
+				e.target.value = e.target.value === "" ? 0 : parseInt(e.target.value, 10)
+			}
+			trace(" -> "+e.target.name +": "+e.target.value);
 			this.model.set(e.target.name, e.target.value);
+
+			if (this.form.checkValidity()){
+				this.actionButton.removeAttr('disabled');
+			}else{
+				this.actionButton.attr('disabled','disabled');
+			}
 		},
 		handleModelError: function(e){
 			trace('error');
@@ -45,17 +56,20 @@ define([
 		},
 		handleClick: function(e){
 			e.preventDefault();
-			if ($(e.target).hasClass('back')){
+			var btn = $(e.target);
+			
+			if (btn.hasClass('back')){
 				Backbone.trigger(_g.events.SIGNAL_GO_BACK, this);
 			}
 
-			if ($(e.target).hasClass('action')){
+			if (btn.hasClass('action')){
 				Backbone.trigger(this.model.isValid() ? _g.events.SEND_DETAILS_UPDATE : _g.events.SHOW_USER_WARNING, this.model);
 			}
 
-			if ($(e.target).hasClass('logout')){
+			if (btn.hasClass('logout')){
 				Backbone.trigger(_g.events.SIGNAL_LOGOUT);
 			}
+			btn = null;
 		}
 	});
 });

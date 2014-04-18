@@ -1,9 +1,7 @@
-define([
-	'app/models/User',
-],function(User){
+define(function(){
 	"use strict";
 	if (!window.__g){
-		var def, _isLogged = false, obj = {
+		var _isLogged = false, obj = {
 			LINK_BASE: "http://217.18.25.29:10070"
 			,LINK_COLLECTION: "/gametitles/list"
 			,LINK_USER_REGISTER: "/register/{username}"
@@ -12,16 +10,20 @@ define([
 			,LINK_USER_TITLES: "/profile/{userId}/titles/{titleId}"
 		}
 		
-		obj.pageStack = [];
+		obj.pageStack = [];			// global reference to all the screens built
 		obj.stage = null;			// global reference to where the app is located (default will be document.body)
-		obj.user = null;			// response from login
+		obj.user = null;			// response model from login
 
 		// screens
 		obj.main = null;
 		obj.login = null;
 		obj.register = null;
 		obj.details = null;
+		obj.selector = null;
 
+		obj.errors = {
+			MIN_PLAYERS: "You must have a minimum of three titles available in your list"
+		}
 		obj.events = {
 			BOOT_APP: "bootUpApp"
 			,LOADING_ERROR: "failToLoad"
@@ -32,10 +34,14 @@ define([
 			,SIGNAL_LOGOUT: "logoutPage"
 			,SIGNAL_REGISTER_PAGE: "registerPage"
 			,SIGNAL_GO_BACK: "goBack"
+			,SIGNAL_CHOOSE_TITLES: "loadTitles"
+			,SEND_USER_TITLES: "saveTitles"
 			,SEND_LOGIN: "sendLoginData"
 			,SEND_REGISTER: "sendRegisterData"
 			,SEND_DETAILS_UPDATE: "sendDetailsUpdate"
 			,SHOW_USER_WARNING: "showError"
+			,CLICK_LIST_ITEM: 'liClick'
+			,REMOVE_LIST_ITEM: 'liDelete'
 		};
 
 		obj.__defineSetter__('isLogged', function(val){ _isLogged = val;});
@@ -57,7 +63,7 @@ define([
 			data = data || {};
 			headers = headers || {}
 
-			def = jQuery.Deferred();
+			var def = jQuery.Deferred();
 			$.ajax({
 				headers: headers,
 				dataType: 'json',
@@ -68,12 +74,14 @@ define([
 				success: function(data){
 					Backbone.trigger(obj.events.LOADING_SUCCESS);
 					def.resolve(data);
+					def = null;
 				},
 				error: function(xhr,err,type){
 					trace(xhr.responseText);
 					var reason = { code: xhr.status, reason: parseTextResponse(xhr.responseText)};
 					Backbone.trigger(obj.events.LOADING_ERROR, reason);
 					def.reject(reason);
+					def = null;
 				}
 			});
 			return def.promise();
