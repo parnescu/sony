@@ -6,6 +6,7 @@ define([
 	return Backbone.View.extend({
 		template: _.template(template),
 		actionButton: null,
+		className: "page login",
 		events: {
 			"click .btn": "handleClick"
 		},

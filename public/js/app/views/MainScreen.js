@@ -41,8 +41,8 @@ define([
 		showLogged: function(){
 			this.actionButton.text("Profile");
 			this.addItems.removeAttr('disabled');
-			trace('MAIN_SCREEN:: logged user is:')
-			trace(_g.user.toJSON());
+			// trace('MAIN_SCREEN:: logged user is:')
+			// trace(_g.user.toJSON());
 		},
 		showNotLogged: function(){
 			this.actionButton.text("Login");

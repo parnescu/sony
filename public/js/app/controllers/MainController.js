@@ -25,7 +25,7 @@ define([
 					.replace("{password}",login.pass.val())
 				
 				_g.load(link).then(function(data){
-					trace("MAIN_CTRL:: ... logged in!");
+					trace("MAIN_CTRL:: ... logged in!\n");
 					
 					_g.user = new User(data);
 					_g.user.url = function(){ return _g.LINK_BASE+_g.LINK_USER_DETAILS.replace("{userId}", this.id);}
@@ -100,7 +100,7 @@ define([
 				if (availableTitles.length == 0){
 					trace("MAIN_CTRL:: loading available titles...");
 					_g.load(_g.LINK_BASE+_g.LINK_COLLECTION).then(function(data){
-						trace("MAIN_CTRL:: done... show selector");		
+						trace("MAIN_CTRL:: done... show selector");
 						availableTitles.add(data.titles);
 						if (!_g.selector){_g.selector = new Selector({collection: availableTitles}).render();}
 						_render(_g.selector);
@@ -111,6 +111,10 @@ define([
 				}
 			},
 			_saveTitles = function(items){
+				if (!_g.user){
+					_error(_g.errors.LOGGED_OUT);
+					return;
+				}
 				_.each(items, function(anchor){
 					var id = $(anchor).parent()[0].dataset.id,
 						model = availableTitles.get(id),
@@ -120,8 +124,10 @@ define([
 					
 					_g.load(link, "PUT", null, _g.getHeaders(_g.user.get('sessionId')))
 						.then(function(data){
+							trace('\n')
 							trace(data)
 							collection.add(model);
+							
 						}
 					);
 					trace(" -> save: "+model.get('name'));
@@ -135,6 +141,7 @@ define([
 
 				_g.load(link, "DELETE", null, _g.getHeaders(_g.user.get('sessionId')))
 					.then(function(data){
+						trace('\n')
 						trace(data);
 						collection.remove(model);
 					}
@@ -232,10 +239,10 @@ define([
 				if(collection.length > 3){
 					// hide all buttons, show "close game button"
 					// enable list items selection, hide delete button
-					
+
 				}else{
 					// show error that you need to have at least three items to continue
-					_error({ code: -1, reason: _g.errors.MIN_PLAYERS})
+					_error(_g.errors.MIN_PLAYERS);
 				}
 				
 			},
@@ -246,8 +253,6 @@ define([
 			
 
 			_start = function(){			
-				Backbone.on(_g.events.SIGNAL_NEW_GAME, handleNewGame);
-								
 				Backbone.on(_g.events.LOADING_ERROR, _error);
 				Backbone.on(_g.events.LOADING_SUCCESS, _success);
 
@@ -257,6 +262,7 @@ define([
 				Backbone.on(_g.events.SIGNAL_REGISTER_PAGE, handleRegister);
 				Backbone.on(_g.events.SIGNAL_DETAILS_PAGE, handleDetails);
 				Backbone.on(_g.events.SIGNAL_LOGOUT, handleLogout);
+				Backbone.on(_g.events.SIGNAL_NEW_GAME, handleNewGame);
 
 				Backbone.on(_g.events.BOOT_APP, handleInitStep);
 				Backbone.on(_g.events.CLICK_LIST_ITEM, handleListClick);
@@ -269,26 +275,26 @@ define([
 				Backbone.on(_g.events.SEND_USER_TITLES, _saveTitles);
 			},
 			_end = function(){
-				Backbone.off(_g.events.SIGNAL_NEW_GAME);
-				Backbone.off(_g.events.SIGNAL_CHOOSE_TITLES);
-				Backbone.off(_g.events.CLICK_LIST_ITEM);
-				Backbone.off(_g.events.REMOVE_LIST_ITEM);
-				
 				Backbone.off(_g.events.LOADING_ERROR);
 				Backbone.off(_g.events.LOADING_SUCCESS);
 
+				Backbone.off(_g.events.SIGNAL_CHOOSE_TITLES);
 				Backbone.off(_g.events.SIGNAL_GO_BACK);
 				Backbone.off(_g.events.SIGNAL_LOGIN_PAGE);
 				Backbone.off(_g.events.SIGNAL_REGISTER_PAGE);
 				Backbone.off(_g.events.SIGNAL_DETAILS_PAGE);
 				Backbone.off(_g.events.SIGNAL_LOGOUT);
-				
+				Backbone.off(_g.events.SIGNAL_NEW_GAME);
+
 				Backbone.off(_g.events.BOOT_APP);
+				Backbone.off(_g.events.CLICK_LIST_ITEM);
+				Backbone.off(_g.events.REMOVE_LIST_ITEM);
 				
 				Backbone.off(_g.events.SEND_LOGIN);
 				Backbone.off(_g.events.SEND_REGISTER);
 				Backbone.off(_g.events.SEND_DETAILS_UPDATE);
 				Backbone.off(_g.events.SHOW_USER_WARNING);
+				Backbone.off(_g.events.SEND_USER_TITLES);
 			}
 
 			return{

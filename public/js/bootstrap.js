@@ -18,4 +18,4 @@ require.config({
 	}
 });
 
-require(['js/app/main.js'], function(){ sonyTestApp.init();});
+require(['js/app/main.js'], function(){ sonyTestApp.init('#page');});

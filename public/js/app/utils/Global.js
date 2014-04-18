@@ -22,7 +22,8 @@ define(function(){
 		obj.selector = null;
 
 		obj.errors = {
-			MIN_PLAYERS: "You must have a minimum of three titles available in your list"
+			MIN_PLAYERS: { code: -1, reason: "You must have a minimum of three titles available in your list"}
+			,LOGGED_OUT: { code: -2, reason: "You must first be logged in!"}
 		}
 		obj.events = {
 			BOOT_APP: "bootUpApp"
