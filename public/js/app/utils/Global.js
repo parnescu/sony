@@ -2,8 +2,8 @@ define(function(){
 	"use strict";
 	if (!window.__g){
 		var _isLogged = false, obj = {
-			//LINK_BASE: "http://217.18.25.29:10070"
-			LINK_BASE: "http://localhost:3001"
+			//LINK_BASE: "http://localhost:3001"		// for local testing
+			LINK_BASE: "http://217.18.25.29:10070"
 			,LINK_COLLECTION: "/gametitles/list"
 			,LINK_USER_REGISTER: "/register/{username}"
 			,LINK_USER_SIGNIN: "/signin/{username}/{password}"

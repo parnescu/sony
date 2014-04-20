@@ -231,15 +231,16 @@ describe("Jasmine TDD test suite", function(){
 			it("must have title, description and close button", function(){
 				view = new AlertScreen();
 				view.render(_g.errors.MIN_PLAYERS);
-				stage.append(view.el);
+				//stage.append(view.el);
 
 				expect(view.$el.find('.description').text()).toBe(_g.errors.MIN_PLAYERS.reason);
 				expect(view.$el.find('.code').text()).toBe("code: "+_g.errors.MIN_PLAYERS.code);
+
 			})
 		});
 
 	});
-	xdescribe("Async server communication", function(){
+	describe("Async server communication", function(){
 		var usrData, profile, items, title;
 		beforeEach(function(done){ setTimeout(function() { done();}, 100);});
 
