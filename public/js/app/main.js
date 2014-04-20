@@ -9,7 +9,6 @@ define([
 		element = $(element).size() ? element : document.body;
 		_g.stage = $(element);
 
-		// build all the views 
 		MainController.init();
 		Backbone.trigger(_g.events.BOOT_APP);
 	}

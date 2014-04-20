@@ -33,7 +33,7 @@ define([
 			return this;
 		},
 		handleDataBinding: function(a){
-			this.$el.find('h2').text("Profile "+a.fullname())
+			this.$el.find('h2 span').text(a.fullname())
 		},
 		handleInputChange: function(e){
 			trace("DETAILS:: input changed");

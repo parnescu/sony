@@ -9,12 +9,14 @@ define([
 	,"app/views/DetailsScreen"
 	,"app/views/List"
 	,"app/views/ListSelection"
+	,"app/views/Alert"
 	,"app/controllers/GameController"
-], function(B, _g, User, GameTitle, MainScreen, LoginScreen, RegisterScreen, DetailsScreen, List, Selector, GameController){
+], function(B, _g, User, GameTitle, MainScreen, LoginScreen, RegisterScreen, DetailsScreen, List, Selector, AlertScreen, GameController){
 	"use strict"
 	if(!window.__smctrl){
 		var f = function(){
 			var currView, _c = Backbone.Collection.extend({ model: GameTitle}), collection = new _c(), availableTitles = new _c(),
+				alert = new AlertScreen(),
 
 		/* handlers for data */
 			handleLoginData = function(login){
@@ -161,7 +163,8 @@ define([
 			_error = function(err){
 				// ajax request failed 
 				if (!err) return;
-				alert("ERROR: "+err.code + " " + err.reason);
+				//alert("ERROR: "+err.code + " " + err.reason);
+				alert.render(err).$el.show();
 			},
 			_render = function(view){
 				// build a view
@@ -275,7 +278,10 @@ define([
 		/* end - handlers for screens */
 			
 
-			_start = function(){			
+			_start = function(){
+				alert.$el.hide();
+				_g.stage.append(alert.el);
+
 				Backbone.on(_g.events.LOADING_ERROR, _error);
 				Backbone.on(_g.events.LOADING_SUCCESS, _success);
 
@@ -301,6 +307,9 @@ define([
 				Backbone.on(_g.events.SEND_USER_TITLES, _saveTitles);
 			},
 			_end = function(){
+				if (alert){
+					alert.remove();
+				}
 				Backbone.off(_g.events.LOADING_ERROR);
 				Backbone.off(_g.events.LOADING_SUCCESS);
 

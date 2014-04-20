@@ -9,24 +9,25 @@ form fieldset .actions * { display: inline-block;}
 form label { min-width:30%; display: block; float:left;}
 form input[type=password],
 form input[type=number],
-form input[type=text] { width:50%;}
+form input[type=text] { width:50%; padding: 0.3em 0.5em; border-radius: .3em; border: .1em solid #ccc; font-size: 0.8em; box-sizing: border-box; -moz-box-sizing:border-box;}
 form input:invalid { background:rgba(255, 0, 0, .2); color:#fff;}
 nav { margin-top:1em;}
 nav .action { position: fixed; bottom: 1em; left:1em;}
 nav .quit { position: fixed; bottom: 1em; left:6em;}
 h2 { margin-bottom:1em;}
+h2 span { color:red;}
 
 .list { padding:1em; box-sizing:border-box;}
-.list li { display: block; overflow: hidden;}
-.list li a.delete { text-indent: -100em; width:0em; height:0em; background:rgba(255,0,0,.3); display: none; float:left;}
+.list li { display: block; overflow: hidden; margin-bottom: .1em}
+.list li a.delete { text-indent: -100em; width:0em; height:0em; display: none; float:left;
+    background:#ccc url('/res/trash.png') 7px 5px no-repeat
+}
+.list li a.delete:active { background-position:7px 7px;}
 .list li a.action { /*float:left; */padding:.5em 1em; min-width: 20em; overflow: hidden;}
 .list li a.selected { background:#ccc; color:#fff; text-decoration: none;}
-.withDelete li a.delete { width:2em; height:2em; display: block;}
+.withDelete li a.delete { width:2em; height:2.2em; display: block;}
 
 
-/*.actions { margin-bottom:5em;}*/
-.cleared { pointer-events: none; opacity: .5;}
-.hidden { display:none;}
 
 /* screens */
 .page { border-radius: .5em; position:relative; padding:1em; background:#efefef; 
@@ -38,17 +39,28 @@ h2 { margin-bottom:1em;}
 	box-shadow: .1em .1em .3em #ccc;
 }
 .page .back { position:absolute; right:1em; top:1em;}
-.login, .register, .details, .availableTitles { width:25em; position: absolute; left: -30em; top: 4em;}
-.activePage { left: 0;}
 
+.notify { position:absolute; top:0; left:0; width:100%; height:100%; z-index: 10;}
+.notify:after { content:""; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.7); pointer-events:none;}
+.notify .alertBody { border-radius: .5em;position: relative;z-index: 2;width: 20em;height: 8em;display: block;overflow: hidden;background: white;left: 50%;top: 50%;margin:-4em 0 0 -10em;}
+.notify .description { font-size:.9em; box-sizing:border-box; padding:.6em; color:#888;}
+.notify .code { font-size:.5em; color:#ccc; right:1em; bottom: 1em; position: absolute;}
+.notify button { position:absolute; left:.5em; bottom:.5em;}
+.notify h1 { font-size: 1.2em; padding: .3em 0 .3em .5em; background: #ccc; color: #fff; text-shadow: 0.1em 0.1em .2em #666;}
+
+.login, .register, .details, .availableTitles { width:25em; position: absolute; left: -30em; top: 4em;}
 .login,
 .register { max-width: 25em;}
 .login label,
 .register label { min-width:40%;}
+
 .details { max-width:30em;}
+.details h2 { width:80%;}
+.details label { min-width:48%;}
 .details .wrap p { display: inline-block; margin-right:.5em;}
 .details .wrap label { min-width: initial; font-size:.7em; line-height: 2em; margin-left:.3em;}
 .details .wrap input { float:left;}
+
 
 .availableTitles { width:20em;}
 .availableTitles h2 { margin-bottom: 0}
@@ -85,11 +97,32 @@ h2 { margin-bottom:1em;}
     -moz-backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    
+    box-shadow: .1em .1em .4em #666;
 }
 #gameScreen .card .face { z-index:2; background-position: 0px   -480px; background:url('../res/back.png');}
 #gameScreen .card .back { z-index:1; -webkit-transform: rotate3d(0,1,0,-180deg); border-radius:.8em; -moz-transform: rotate3d(0,1,0,-180deg); }
 #gameScreen .pressed .face { z-index:1; -webkit-transform: rotate3d(0,1,0,180deg); -moz-transform: rotate3d(0,1,0,180deg);}
 #gameScreen .pressed .back { z-index:2; -webkit-transform: rotate3d(0,1,0,0deg); -moz-transform: rotate3d(0,1,0,0deg); }
+
+/* misc classes */
+.cleared { pointer-events: none; opacity: .5;}
+.hidden { display:none;}
+.activePage { left: 0;}
+
+
+button.btn { padding: .5em 1em; border-radius: .5em; font-size: .8em; border: none; color: #fff; text-shadow: .1em .1em #000; outline:none;
+    box-shadow: 0 .1em .2em rgba(0,0,0,.5); 
+    background: linear-gradient(to top, #125DB3, #2797FF);
+}
+button.btn:active { background: linear-gradient(to bottom, #125DB3, #2797FF); margin-top: .3em;}
+button.btn:disabled { background: linear-gradient(to top, #ccc, #929292); color: #7E7E7E; text-shadow: none;}
+
+button.logger:before { content: " "; font-family:"Webdings";}
+button.logout { background: linear-gradient(to top, #741111, #f00);}
+button.logout:active { background: linear-gradient(to bottom, #741111, #f00);}
+button.back { background: linear-gradient(to top, #2C680B, #43A70C);}
+button.back:before { content:"⌫ ";}
+button.back:active { background: linear-gradient(to bottom, #2C680B, #43A70C)}
+
 
 

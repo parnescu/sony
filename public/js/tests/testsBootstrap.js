@@ -42,6 +42,7 @@ var specs = ['/js/tests/tests.js'],
 		,'/js/app/views/RegisterScreen.js'
 		,'/js/app/views/DetailsScreen.js'
 		,'/js/app/views/List.js'
+		,'/js/app/views/Alert.js'
 		,'/js/app/controllers/MainController.js'
 		,'/js/app/controllers/GameController.js'
 	];
@@ -55,6 +56,7 @@ requirejs(['boot'].concat(dependencies), function(boot
 		,RegisterScreen
 		,DetailsScreen
 		,List
+		,AlertScreen
 		,MainController
 		,GameController
 	){
@@ -68,6 +70,7 @@ requirejs(['boot'].concat(dependencies), function(boot
 	window.RegisterScreen = RegisterScreen;
 	window.DetailsScreen = DetailsScreen;
 	window.List = List;
+	window.AlertScreen = AlertScreen;
 
 	// other
 	window._g = _g;
