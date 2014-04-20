@@ -20,6 +20,7 @@ define([
 				this.playButton = this.$el.find('button.action');
 				this.actionButton = this.$el.find('button.logger');
 				this.addItems = this.$el.find('button.titles');
+				this.quitButton = this.$el.find('button.quit');
 			}
 			return this;
 		},
@@ -35,6 +36,9 @@ define([
 
 			if(btn.hasClass('titles')){
 				Backbone.trigger(_g.events.SIGNAL_CHOOSE_TITLES);
+			}
+			if(btn.hasClass('quit')){
+				Backbone.trigger(_g.events.SIGNAL_QUIT_GAME);	
 			}
 			btn = null;
 		},

@@ -43,6 +43,7 @@ var specs = ['/js/tests/tests.js'],
 		,'/js/app/views/DetailsScreen.js'
 		,'/js/app/views/List.js'
 		,'/js/app/controllers/MainController.js'
+		,'/js/app/controllers/GameController.js'
 	];
 
 requirejs(['boot'].concat(dependencies), function(boot
@@ -55,6 +56,7 @@ requirejs(['boot'].concat(dependencies), function(boot
 		,DetailsScreen
 		,List
 		,MainController
+		,GameController
 	){
 	// models
 	window.User = User;
@@ -70,6 +72,7 @@ requirejs(['boot'].concat(dependencies), function(boot
 	// other
 	window._g = _g;
 	window.MainController = MainController;
+	window.GameController = GameController;
 	
 	requirejs(specs, function(specs){	
 		window.onload();

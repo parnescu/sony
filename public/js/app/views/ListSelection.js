@@ -35,6 +35,7 @@ define([
 		},
 		goBack: function(){
 			this.$el.find('a.selected').removeClass('selected');
+			this.actionButton.attr('disabled', 'disabled');
 			Backbone.trigger(_g.events.SIGNAL_GO_BACK, this);
 		}
 	});

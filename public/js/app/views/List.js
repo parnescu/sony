@@ -30,7 +30,7 @@ define([
 		},
 		addElement: function(model){
 			if (this.collection.length>0){ this.$el.find('.noItems').remove();}
-			var str = "<li data-id='%id'><a class='action' href='#selectItem' title='%n'>%n</a><a href='#deleteItem' title='Delete %n' class='delete'>delete %n</a></li>"
+			var str = "<li data-id='%id'><a href='#deleteItem' title='Delete %n' class='delete'>delete %n</a><a class='action' href='#selectItem' title='%n'>%n</a></li>"
 			this.$el.append(str.replace(/\%n/ig, model.get('name')).replace(/\%id/ig, model.get('id')));
 		},
 		handleClick: function(e){

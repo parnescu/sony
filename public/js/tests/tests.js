@@ -12,9 +12,9 @@ describe("Jasmine TDD test suite", function(){
 			notes: "ba dum tiss"
 		},
 		bogusTitles = [
-			{ id:0, name:"item 1", description:"a"}
-			,{ id:1, name:"item 2", description:"b"}
-			,{ id:2, name:"item 3", description:"c"}
+			{ id:"d1660df3-e8dc-401e-85e5-8e666ce9360d", name:"item 1", description:"a"}
+			,{ id:"d57058b2-6b61-4d7f-82ce-8547d91a864", name:"item 2", description:"b"}
+			,{ id:"dc7efa67-684b-4eae-98e7-629433ef93bf", name:"item 3", description:"c"}
 		]
 
 	describe("Views", function(){
@@ -228,7 +228,7 @@ describe("Jasmine TDD test suite", function(){
 		});
 
 	});
-	describe("Async server communication", function(){
+	xdescribe("Async server communication", function(){
 		var usrData, profile, items, title;
 		beforeEach(function(done){ setTimeout(function() { done();}, 100);});
 
@@ -341,4 +341,47 @@ describe("Jasmine TDD test suite", function(){
 			Backbone.off(_g.events.LOADING_ERROR);
 		})
 	});
+
+	describe("Game", function(){
+		describe("starting a new game", function(){
+			var data;
+			it("minimum of three items should be provided, double items and add them to a collection", function(){
+				expect(function(){ GameController.start([]) }).toThrow();
+				GameController.start(bogusTitles);
+				data = GameController.items;
+				expect(data.length).toEqual(6);
+			});
+			xit("generate colors based on the item ids and randomize data (might fail because of randomize)", function(){
+				expect(data[0].name).not.toBe(bogusTitles[0].name);
+				expect(data[3].color).toBeDefined();
+				expect(data[3].color.length).toBe(6)
+			});
+			it("build the game view and start the counter", function(){
+				data = GameController.view();
+				stage.append(data.el);
+
+				expect(data).toBeDefined();
+				expect(data instanceof Backbone.View).toBeTruthy();
+				expect(data.score).toBeDefined();
+				expect(data.time).toBeDefined();
+				expect(data.tiles).toBeDefined();
+				expect(data.tiles[0].children[2].tagName).toBe('A');
+				expect(data.tiles[0].children.length).toBe(6);
+				expect(data.time.text()).toBe('time passed: 0s');
+				expect(data.score.text()).toBe('0 points');
+				data.remove()
+			});
+
+			xit("getting things right earns you 5 points, getting it wrong robs you of 1 point (might fail because of random)", function(){
+				var i = 0;
+				Backbone.on(_g.events.TILE_CLICK, function(){ i++});
+				$('.tiles a:eq(1) span.face').click();
+				$('.tiles a:eq(2) span.face').click();
+				expect(i).toBeGreaterThan(0);
+				expect(GameController.score()).toEqual(-1)
+
+				
+			});
+		});
+	})
 });

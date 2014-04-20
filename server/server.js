@@ -1,35 +1,25 @@
+trace = function(m){ console.log(m)};
 
-/**
- * Module dependencies.
- */
+var express = require('express'),
+	app = express(),
+	config = require('./appConfig.js')(app, express),
+	routes = require('./routes.js')();
 
-var express = require('express');
-var http = require('http');
-var path = require('path');
 
-var app = express();
+// setup paths
+app.get('/', routes.index);
+app.get('/tests', routes.tests);
 
-// all environments
-app.set('port', process.env.PORT || 3001);
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-app.use(express.favicon());
-app.use(express.logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded());
-app.use(express.methodOverride());
-app.use(app.router);
-app.use(express.static(path.join(__dirname, '../public')));
-app.use(express.static(path.join(__dirname, '../bower_components')));
+// setup api - for offline work
+app.get('/signin/*', routes.signin);
+app.get('/register/*', routes.register);
+app.get('/gametitles/list', routes.titles);
+app.get('/profile/:id', routes.details);
+app.get('/profile/:id/titles', routes.userTitles);
 
-// development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
-}
+app.put('/profile/:id', routes.doNothing);
+app.put('/profile/:id/titles/*', routes.doNothing);
+app.delete('/profile/:id/titles/*', routes.doNothing);
 
-app.get('/', function(req, res){ res.render('layout')});
-app.get('/tests', function(req, res){ res.render('tests')});
-
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
+app.listen(3001)
+trace("SERVER:: init");

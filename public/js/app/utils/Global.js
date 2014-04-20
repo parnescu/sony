@@ -2,7 +2,8 @@ define(function(){
 	"use strict";
 	if (!window.__g){
 		var _isLogged = false, obj = {
-			LINK_BASE: "http://217.18.25.29:10070"
+			//LINK_BASE: "http://217.18.25.29:10070"
+			LINK_BASE: "http://localhost:3001"
 			,LINK_COLLECTION: "/gametitles/list"
 			,LINK_USER_REGISTER: "/register/{username}"
 			,LINK_USER_SIGNIN: "/signin/{username}/{password}"
@@ -30,6 +31,8 @@ define(function(){
 			,LOADING_ERROR: "failToLoad"
 			,LOADING_SUCCESS: "loadSuccess"
 			,SIGNAL_NEW_GAME: "prepareGame"
+			,SIGNAL_END_GAME: "endGame"
+			,SIGNAL_QUIT_GAME: "quitGame"
 			,SIGNAL_DETAILS_PAGE: "detailsPage"
 			,SIGNAL_LOGIN_PAGE: "loginPage"
 			,SIGNAL_LOGOUT: "logoutPage"
@@ -41,8 +44,9 @@ define(function(){
 			,SEND_REGISTER: "sendRegisterData"
 			,SEND_DETAILS_UPDATE: "sendDetailsUpdate"
 			,SHOW_USER_WARNING: "showError"
-			,CLICK_LIST_ITEM: 'liClick'
-			,REMOVE_LIST_ITEM: 'liDelete'
+			,CLICK_LIST_ITEM: "liClick"
+			,REMOVE_LIST_ITEM: "liDelete"
+			,TILE_CLICK: "clickATile"
 		};
 
 		obj.__defineSetter__('isLogged', function(val){ _isLogged = val;});

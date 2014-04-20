@@ -9,7 +9,8 @@ define([
 	,"app/views/DetailsScreen"
 	,"app/views/List"
 	,"app/views/ListSelection"
-], function(B, _g, User, GameTitle, MainScreen, LoginScreen, RegisterScreen, DetailsScreen, List, Selector){
+	,"app/controllers/GameController"
+], function(B, _g, User, GameTitle, MainScreen, LoginScreen, RegisterScreen, DetailsScreen, List, Selector, GameController){
 	"use strict"
 	if(!window.__smctrl){
 		var f = function(){
@@ -151,6 +152,8 @@ define([
 
 
 		/* handlers for screens */
+			_btnEnable = function(el){ el.removeAttr('disabled')},
+			_btnDisable = function(el){ el.attr('disabled', 'disabled');},
 			_success = function(){
 				// ajax request successful 
 				//trace("MAIN_CTRL:: ---> communication success");
@@ -170,6 +173,7 @@ define([
 				
 					currView = view;
 					currView.$el.show();	
+					currView.$el.addClass('activePage');
 				}
 			},
 			_goBack = function(view){
@@ -180,15 +184,14 @@ define([
 					_g.pageStack.pop();
 					currView = _g.pageStack[_g.pageStack.length-1];
 				}
-				view.$el.hide();
+				view.$el.removeClass('activePage');
+				//view.$el.hide();
 			},
 			handleCollectionUpdate = function(){
 				trace("MAIN_CTRL:: collection updated "+collection.length+" items left");
-				if (collection.length == 0){
-					_g.main.playButton.attr('disabled','disabled')
-				}else{
-					_g.main.playButton.removeAttr('disabled')
-				}
+				var fn = collection.length == 0 ? _btnDisable : _btnEnable
+				fn(_g.main.playButton);
+				fn = null;
 			},
 			handleInitStep = function(){
 				trace("MAIN_CTRL:: boot application")
@@ -222,29 +225,49 @@ define([
 				_goBack(_g.details);
 			},
 			handleListClick = function(view, element){
-				if(view.$el.hasClass('allTitles')){
-					element.toggleClass('selected');
-					
-					if(view.$el.find('a.selected').size()){
-						_g.selector.actionButton.removeAttr('disabled')
-					}else{
-						_g.selector.actionButton.attr('disabled','disabled')
-					}
-				}else{
-					trace("MAIN_CTRL:: main list...");
-				}
+				element.toggleClass('selected');
+				if(!view.$el.hasClass('allTitles')) return;
+
+				var fn = view.$el.find('a.selected').size() ? _btnEnable : _btnDisable;
+				fn(_g.selector.actionButton);
+				fn = null;
 			},
 			handleNewGame = function(){
 				trace('MAIN_CTRL:: start new game');
-				if(collection.length > 3){
-					// hide all buttons, show "close game button"
-					// enable list items selection, hide delete button
+				if(collection.length > 2){
+					// hide everything, show "close game button"
+					// init game with current titles
 
+					_btnDisable(_g.main.actionButton);
+					_btnDisable(_g.main.playButton);
+					_btnDisable(_g.main.addItems);
+					_btnEnable(_g.main.quitButton);
+
+					_g.main.subview.$el.hide();
+
+					GameController.start(collection.toJSON());
 				}else{
 					// show error that you need to have at least three items to continue
 					_error(_g.errors.MIN_PLAYERS);
 				}
 				
+			},
+			handleEndGame = function(){
+				trace('MAIN_CTRL:: the game has ended');
+				_error({ code: -2, reason:"Congratulations! You have won with "+GameController.score()+" points"})
+			},
+			handleQuitGame = function(){
+				trace('MAIN_CTRL:: quit the game');
+				// show back everything hide quit button
+				// end the game
+				_btnEnable(_g.main.actionButton);
+				_btnEnable(_g.main.playButton);
+				_btnEnable(_g.main.addItems);
+				_btnDisable(_g.main.quitButton);
+
+				_g.main.subview.$el.show();
+
+				GameController.stop();
 			},
 			handleValidationError = function(){
 				trace('baaaaa... ' + _g.user.validationError)
@@ -263,6 +286,9 @@ define([
 				Backbone.on(_g.events.SIGNAL_DETAILS_PAGE, handleDetails);
 				Backbone.on(_g.events.SIGNAL_LOGOUT, handleLogout);
 				Backbone.on(_g.events.SIGNAL_NEW_GAME, handleNewGame);
+				Backbone.on(_g.events.SIGNAL_END_GAME, handleEndGame);
+				
+				Backbone.on(_g.events.SIGNAL_QUIT_GAME, handleQuitGame);
 
 				Backbone.on(_g.events.BOOT_APP, handleInitStep);
 				Backbone.on(_g.events.CLICK_LIST_ITEM, handleListClick);
@@ -285,6 +311,8 @@ define([
 				Backbone.off(_g.events.SIGNAL_DETAILS_PAGE);
 				Backbone.off(_g.events.SIGNAL_LOGOUT);
 				Backbone.off(_g.events.SIGNAL_NEW_GAME);
+				Backbone.off(_g.events.SIGNAL_END_GAME);
+				Backbone.off(_g.events.SIGNAL_QUIT_GAME);
 
 				Backbone.off(_g.events.BOOT_APP);
 				Backbone.off(_g.events.CLICK_LIST_ITEM);
