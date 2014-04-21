@@ -300,7 +300,7 @@ describe("Jasmine TDD test suite", function(){
 				}
 			);
 		});
-		it("search for alex's titles", function(done){
+		it("search for alex's titles (might fail if somebody played around)", function(done){
 			Backbone.on(_g.events.LOADING_ERROR, done);
 
 			var link = _g.LINK_BASE+_g.LINK_USER_TITLES
@@ -312,8 +312,8 @@ describe("Jasmine TDD test suite", function(){
 					expect(data.userId).toBe(usrData.userId)
 
 					// this might change and fail, based upon other experiments
-					//expect(data.titles.length).toBe(0);
-					expect(data.titles.length).toBeGreaterThan(0);
+					expect(data.titles.length).toBe(0);
+					//expect(data.titles.length).toBeGreaterThan(0);
 					done();
 				}
 			);
