@@ -44,13 +44,14 @@ define([
 		},
 		showLogged: function(){
 			this.actionButton.text("Profile");
-			this.addItems.removeAttr('disabled');
+			this.playButton.removeAttr('disabled');
 			// trace('MAIN_SCREEN:: logged user is:')
 			// trace(_g.user.toJSON());
 		},
 		showNotLogged: function(){
 			this.actionButton.text("Login");
 			this.addItems.attr('disabled','disabled');
+			this.playButton.attr('disabled','disabled');
 
 			trace('MAIN_SCREEN:: user has logged out');
 			if (this.subview){
